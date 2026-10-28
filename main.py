@@ -19,7 +19,7 @@ from days.day7.day7 import Day7
 from days.day8.day8 import Day8
 from days.day9.day9 import Day9
 
-day = 1
+day = 2
 
 match day:
     case 1:
