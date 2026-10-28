@@ -1,5 +1,10 @@
-﻿class BasePart:
-    def __init__(self,day:int,part:int,test:bool = False):
+﻿def get_file(filename) -> str:
+    with open(filename, 'r', encoding='utf-8-sig') as file:
+        return file.read()
+
+
+class BasePart:
+    def __init__(self, day: int, part: int, test: bool = False):
         self.day = day
         self.part = part
         self.test = test
@@ -12,16 +17,15 @@
         return f"day {self.day} part {self.part} not yet implemented!"
 
     def get_input_lines(self) -> list[str]:
-        test_str = ".test"
-        if not self.test:
-            test_str = ""
-        with open(f"inputs/day{self.day}-input{test_str}.txt",'r', encoding='utf-8-sig') as file:
-            content = file.read().replace("\r\n","\n").split("\n")
-            return content
+        if self.test:
+            file = get_file(f"inputs/day{self.day}-input.test.txt")
+        else:
+            file = get_file(f"inputs/day{self.day}-part{self.part}-input.txt")
+        return file.replace("\r\n", "\n").split("\n")
 
     def get_input(self) -> str:
-        test_str = ".test"
-        if not self.test:
-            test_str = ""
-        with open(f"inputs/day{self.day}-input{test_str}.txt", 'r', encoding='utf-8-sig') as file:
-            return file.read().replace("\r\n", "\n")
+        if self.test:
+            file = get_file(f"inputs/day{self.day}-input.test.txt")
+        else:
+            file = get_file(f"inputs/day{self.day}-part{self.part}-input.txt")
+        return file.replace("\r\n", "\n")
