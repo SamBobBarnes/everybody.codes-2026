@@ -64,7 +64,7 @@ class Part2(BasePart):
           lambda x: x.b == rule.a, rules))
         b_s = list(filter(
           lambda x: x.a == rule.b, rules))
-
+        # todo: order of operations; dont violate rules
         # print(a_s)
         # print(b_s)
         for a in a_s:
