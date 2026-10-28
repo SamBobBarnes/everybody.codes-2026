@@ -4,8 +4,12 @@
         self.part = part
         self.test = test
 
+    def run_part(self):
+        answer = self.run()
+        print(f"\n----------------\nDay {self.day} Part {self.part}\n{answer}\n----------------\n")
+
     def run(self):
-        print (f"day {self.day} part {self.part} not yet implemented!")
+        return f"day {self.day} part {self.part} not yet implemented!"
 
     def get_input(self) -> list[str]:
         test_str = ".test"
