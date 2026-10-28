@@ -3,7 +3,7 @@ from days.day3.part2 import Part2
 from days.day3.part3 import Part3
 
 
-class Day1:
+class Day3:
     part1 = Part1()
     part2 = Part2()
     part3 = Part3()
