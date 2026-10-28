@@ -24,5 +24,6 @@ class Part1(BasePart):
       groups.append(int(str(group).replace(", ", "").lstrip("[").rstrip("]")))
     total = 0
     for group in groups:
+      print(group)
       total += group
     return total
