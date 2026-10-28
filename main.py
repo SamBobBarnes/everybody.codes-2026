@@ -1,7 +1,9 @@
-﻿day = 1
+﻿from days.day1.day1 import Day1
+
+day = 1
 
 match day:
     case 1:
-        Day1.Part1.Run()
-        Day1.Part2.Run()
-        Day1.Part3.Run()
+        Day1().part1.run()
+        Day1().part2.run()
+        Day1().part3.run()
