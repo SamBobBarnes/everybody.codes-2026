@@ -20,10 +20,10 @@ class Part1(BasePart):
         elif not lt and group.index(b) > group.index(a):
           group.remove(a)
           group.insert(group.index(b) + 1, a)
+
       group.reverse()
       groups.append(int(str(group).replace(", ", "").lstrip("[").rstrip("]")))
     total = 0
     for group in groups:
-      print(group)
       total += group
     return total
