@@ -29,7 +29,7 @@ class Rule:
   def __lt__(self, other):
     if not isinstance(other, Rule):
       return NotImplemented
-    return self.a < other.a or self.b < other.b
+    return self.a < other.a or (self.a == other.a and self.b < other.b)
 
   def __repr__(self) -> str:
     sign = "<"
@@ -37,14 +37,19 @@ class Rule:
 
 
 class Part2(BasePart):
+  width = 9
+
   def __init__(self):
-    super().__init__(2, 1)
+    super().__init__(2, 2)
 
   def run(self):
     input = self.get_input_lines()
     groups = []
     for line in input:
-      group = [1, 2, 3, 4, 5]
+      group = []
+      for i in range(1, self.width + 1):
+        group.append(i)
+
       rules = []
 
       # initial rules
@@ -64,9 +69,6 @@ class Part2(BasePart):
           lambda x: x.b == rule.a, rules))
         b_s = list(filter(
           lambda x: x.a == rule.b, rules))
-        # todo: order of operations; dont violate rules
-        # print(a_s)
-        # print(b_s)
         for a in a_s:
           if len(list(filter(lambda x: x.a == a.a and x.b == rule.b, extra_rules))) == 0 and len(
             list(filter(lambda x: x.a == a.a and x.b == rule.b, rules))) == 0:
@@ -76,9 +78,6 @@ class Part2(BasePart):
             list(filter(lambda x: x.a == rule.a and x.b == b.b, rules))) == 0:
             extra_rules.append(Rule(rule.a, b.b))
 
-      print(rules)
-      print(extra_rules)
-
       rules.extend(extra_rules)
 
       def run_rule(rule: Rule):
@@ -86,13 +85,12 @@ class Part2(BasePart):
           group.remove(rule.a)
           group.insert(group.index(rule.b), rule.a)
 
+      rules.sort()
       for comp in rules:
         run_rule(comp)
-      print(group)
       group.reverse()
       groups.append(int(str(group).replace(", ", "").lstrip("[").rstrip("]")))
     total = 0
     for group in groups:
-      print(group)
       total += group
     return total
