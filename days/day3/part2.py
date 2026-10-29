@@ -8,7 +8,7 @@ def get_decimal_num(exponents: str, num: str) -> int:
   while len(extended_ex) < num_len:
     extended_ex += exponents
 
-  extended_ex = extended_ex[len(extended_ex) % num_len:]
+  extended_ex = extended_ex[len(extended_ex) - num_len:]
 
   ex_len = len(extended_ex)
 
@@ -29,5 +29,6 @@ class Part2(BasePart):
     total = 0
     for line in input:
       parts = line.lstrip("ISO-").split(" ")
-      total += get_decimal_num(parts[0], parts[1])
+      val = get_decimal_num(parts[0], parts[1])
+      total += val
     return total
