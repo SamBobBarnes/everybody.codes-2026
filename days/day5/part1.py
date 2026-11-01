@@ -1,5 +1,4 @@
 from math import floor
-from queue import Queue
 
 from days.base_part import BasePart, Map, Point
 
@@ -50,25 +49,6 @@ def count_neighbors(bin_map: Map[bool], land_map: Map[bool], p: Point, width, he
   if land_count == 0:
     return 0
   return count + land_count
-
-
-def queue_neighbors(q: Queue[Point], p: Point, width: int, height: int, land_map: Map[bool]):
-  if p.y + 1 < height and not land_map[p.x][p.y + 1]:
-    q.put_nowait(Point(p.x, p.y + 1))
-  if p.y - 1 > 0 and not land_map[p.x][p.y - 1]:
-    q.put_nowait(Point(p.x, p.y - 1))
-  if p.x + 1 < width and not land_map[p.x + 1][p.y]:
-    q.put_nowait(Point(p.x + 1, p.y))
-  if p.x - 1 > 0 and not land_map[p.x - 1][p.y]:
-    q.put_nowait(Point(p.x - 1, p.y))
-  if p.x + 1 < width and p.y - 1 > 0 and not land_map[p.x + 1][p.y - 1]:
-    q.put_nowait(Point(p.x + 1, p.y - 1))
-  if p.x - 1 > 0 and p.y - 1 > 0 and not land_map[p.x - 1][p.y - 1]:
-    q.put_nowait(Point(p.x - 1, p.y - 1))
-  if p.x + 1 < width and p.y + 1 < height and not land_map[p.x + 1][p.y + 1]:
-    q.put_nowait(Point(p.x + 1, p.y + 1))
-  if p.x - 1 > 0 and p.y + 1 < height and not land_map[p.x - 1][p.y + 1]:
-    q.put_nowait(Point(p.x - 1, p.y + 1))
 
 
 def print_map(land_map: Map[bool], bin_map: Map[bool]):
