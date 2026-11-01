@@ -69,5 +69,18 @@ class Part3(BasePart):
 
     times = list(map(lambda x: x["score"], dict.values()))
     times.sort(key=lambda x: -x)
-    print(times)
-    return sum(list(map(lambda x: (x[0] + 1) * x[1], enumerate(times))))
+    total = 0
+    prev_time = 0
+    current_multiplier = 1
+    m_to_sub = 1
+    for time in times:
+      if time == prev_time:
+        total += time * (current_multiplier - m_to_sub)
+        m_to_sub += 1
+      else:
+        prev_time = time
+        total += time * current_multiplier
+        m_to_sub = 1
+      current_multiplier += 1
+
+    return total
