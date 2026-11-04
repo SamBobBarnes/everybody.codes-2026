@@ -3,7 +3,7 @@ from days.base_part import BasePart
 
 class Part2(BasePart):
   def __init__(self):
-    super().__init__(7, 2)
+    super().__init__(7, 2, True)
 
   def run(self):
     input = self.get_input_lines()
