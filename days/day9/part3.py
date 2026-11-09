@@ -9,7 +9,7 @@ class Part3(BasePart):
   def run(self):
     plants = list(map(lambda x: Plant(x), self.get_input_lines()))
     total = 0
-    for plant in plants:
+    for n, plant in enumerate(plants):
       secs = 0
       while plant.total() < plant.limit:
         plant.grow()
