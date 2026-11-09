@@ -12,6 +12,9 @@ class Point:
     self.y = y
     self.z = z
 
+  def __str__(self):
+    return f"({self.x},{self.y},{self.z})"
+
 
 class BasePart:
   def __init__(self, day: int, part: int, test: bool = False):
