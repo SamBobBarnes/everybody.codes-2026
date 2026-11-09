@@ -28,13 +28,13 @@ class Part1(BasePart):
       x = i
       y = floor(row_count / 2) - i
       if y > 0:
-        print(f"{i}: {Point(x, y)}")
+        # print(f"{i}: {Point(x, y)}")
         self.traverse_map(Point(x, y), row_len)
         row_len += 1
 
       else:
         for x1 in range(x, x + (ceil(row_count / 2) * 2), 2):
-          print(f"{i}: {Point(x1, y)}")
+          # print(f"{i}: {Point(x1, y)}")
           self.traverse_map(Point(x1, y), row_len)
           row_len -= 1
 
@@ -49,7 +49,7 @@ class Part1(BasePart):
     y = start.y
     shadow_height = 0
     map_row: list[GrowingSpot] = []
-    for _ in range(0, row_len + 1):  # todo: implement max row len calc
+    for _ in range(0, row_len + 1):
       tree = GrowingSpot(Point(x, y), int(self.input[y][x]))
       tree.shadow_height = shadow_height
       if tree.tree_height > shadow_height:
