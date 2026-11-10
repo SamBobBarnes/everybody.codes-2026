@@ -4,7 +4,7 @@ from days.day10.part2 import Ghost
 
 class Part3(BasePart):
   def __init__(self):
-    super().__init__(10, 3)
+    super().__init__(10, 3, True)
     self.ghosts: list[Ghost] = []
     self.map = []
     self.max_collisions = 1000000000000

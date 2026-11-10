@@ -50,6 +50,8 @@ class Ghost:
     return self.pos
 
 
+# todo: cycle detection
+
 class Part2(BasePart):
   def __init__(self):
     super().__init__(10, 2)
