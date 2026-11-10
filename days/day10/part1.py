@@ -3,7 +3,6 @@ from days.base_part import BasePart, Point
 
 class Ghost:
   def __init__(self, pos: Point, dir: int):
-    self.collisions = 0
     self.pos = pos
     self.dir = dir
 
@@ -25,8 +24,9 @@ class Ghost:
   def turn_around(self):
     self.dir = (self.dir + 2) % 4
 
-  def move(self, walls: list[list[bool]]) -> Point:
-    new_pos = self.pos
+  def move(self, walls: list[list[bool]]) -> tuple[Point, bool]:
+    new_pos = Point(self.pos.x, self.pos.y)
+    collision = False
     match self.dir:
       case 0:
         new_pos.y -= 1
@@ -39,15 +39,15 @@ class Ghost:
 
     if walls[new_pos.y][new_pos.x]:
       self.turn_right()
-      self.collisions += 1
+      collision = True
     else:
       self.pos = new_pos
-    return self.pos
+    return tuple((self.pos, collision))
 
 
 class Part1(BasePart):
   def __init__(self):
-    super().__init__(10, 1, True)
+    super().__init__(10, 1)
     self.ghosts: list[Ghost] = []
     self.map = []
 
@@ -77,17 +77,20 @@ class Part1(BasePart):
     for _ in range(0, rounds):
       positions = {}
       for i, g in enumerate(self.ghosts):
-        new_pos = g.move(self.map)
+        new_pos, collision = g.move(self.map)
         if positions.get(new_pos.to_string()) is None:
           positions[new_pos.to_string()] = [i]
         else:
           positions[new_pos.to_string()].append(i)
-
+        if collision:
+          total_collisions += 1
+      # print("moves")
       overlaps = list(filter(lambda x: len(x[1]) > 1, positions.items()))
       for _, gl in overlaps:
         collisions = len(gl)
         total_collisions += collisions
         for i in gl:
           self.ghosts[i].turn_around()
+      # print("overlaps")
 
-    return sum(map(lambda x: x.collisions, self.ghosts)) + total_collisions
+    return total_collisions
