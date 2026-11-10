@@ -15,6 +15,9 @@ class Point:
   def __str__(self):
     return f"({self.x},{self.y},{self.z})"
 
+  def to_string(self):
+    return self.__str__()
+
 
 class BasePart:
   def __init__(self, day: int, part: int, test: bool = False):

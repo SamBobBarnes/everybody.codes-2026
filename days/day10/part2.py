@@ -5,7 +5,7 @@ class Part2(BasePart):
   def __init__(self):
     super().__init__(10, 2, True)
 
-  def run(self):
-    input = self.get_input_lines()
-    for line in input:
-      print(line)
+  # def run(self):
+  #   input = self.get_input_lines()
+  #   for line in input:
+  #     print(line)
