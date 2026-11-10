@@ -2,10 +2,11 @@ from days.base_part import BasePart, Point
 
 
 class Ghost:
-  def __init__(self, pos: Point, dir: int):
+  def __init__(self, pos: Point, dir: int, expire_after: int):
     self.pos = pos
     self.dir = dir
     self.collisions = 0
+    self.max_collisions = expire_after
 
   def __str__(self):
     match self.dir:
@@ -20,7 +21,7 @@ class Ghost:
     return f"[{self.pos.x},{self.pos.y}] {dir_str}"
 
   def expired(self) -> bool:
-    return self.collisions >= 10000
+    return self.collisions >= self.max_collisions
 
   def turn_right(self):
     self.dir = (self.dir + 1) % 4
@@ -54,6 +55,7 @@ class Part2(BasePart):
     super().__init__(10, 2)
     self.ghosts: list[Ghost] = []
     self.map = []
+    self.max_collisions = 10000
 
   def run(self):
     input = self.get_input_lines()
@@ -67,25 +69,26 @@ class Part2(BasePart):
           row.append(False)
         match char:
           case '>':
-            self.ghosts.append(Ghost(Point(x, y), 1))
+            self.ghosts.append(Ghost(Point(x, y), 1, self.max_collisions))
           case '<':
-            self.ghosts.append(Ghost(Point(x, y), 3))
+            self.ghosts.append(Ghost(Point(x, y), 3, self.max_collisions))
           case '^':
-            self.ghosts.append(Ghost(Point(x, y), 0))
+            self.ghosts.append(Ghost(Point(x, y), 0, self.max_collisions))
           case 'v':
-            self.ghosts.append(Ghost(Point(x, y), 2))
+            self.ghosts.append(Ghost(Point(x, y), 2, self.max_collisions))
 
       self.map.append(row)
+    self.watch.start()
     rounds = 0
     while len(self.ghosts) > 0:
       positions = {}
       for i, g in enumerate(self.ghosts):
         new_pos = g.move(self.map)
         if not g.expired():
-          if positions.get(new_pos.to_string()) is None:
-            positions[new_pos.to_string()] = [i]
+          if positions.get(new_pos) is None:
+            positions[new_pos] = [i]
           else:
-            positions[new_pos.to_string()].append(i)
+            positions[new_pos].append(i)
 
       # print("moves")
       overlaps = list(filter(lambda x: len(x[1]) > 1, positions.items()))
@@ -100,5 +103,5 @@ class Part2(BasePart):
       for i in reversed(range(0, len(self.ghosts))):
         if self.ghosts[i].expired():
           self.ghosts.pop(i)
-
+    self.watch.stop()
     return rounds
