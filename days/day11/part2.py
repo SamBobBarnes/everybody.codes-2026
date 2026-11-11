@@ -4,19 +4,6 @@ from days.base_part import BasePart
 from days.day11.part1 import Portal
 
 
-class Route:
-  def __init__(self, start: Portal, end: Portal, length: int = 0):
-    self.start = start
-    self.end = end
-    self.length = length
-
-  def __eq__(self, other: object):
-    if not isinstance(other, Route):
-      return NotImplemented
-    return (self.start == other.start and self.end == other.end) or (
-      self.start == other.end and self.end == other.start)
-
-
 class Part2(BasePart):
   def __init__(self):
     super().__init__(11, 2)
