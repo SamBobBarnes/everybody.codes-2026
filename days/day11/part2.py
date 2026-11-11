@@ -1,8 +1,20 @@
-import sys
-from queue import PriorityQueue
+from collections import deque
 
 from days.base_part import BasePart
-from days.day11.part1 import Portal, PrioritizedItem
+from days.day11.part1 import Portal
+
+
+class Route:
+  def __init__(self, start: Portal, end: Portal, length: int = 0):
+    self.start = start
+    self.end = end
+    self.length = length
+
+  def __eq__(self, other: object):
+    if not isinstance(other, Route):
+      return NotImplemented
+    return (self.start == other.start and self.end == other.end) or (
+      self.start == other.end and self.end == other.start)
 
 
 class Part2(BasePart):
@@ -23,7 +35,7 @@ class Part2(BasePart):
       self.portals[i].connections.append(self.portals[(i - 1) % portal_count])
       self.portals[i].connections.append(self.portals[(i - 2) % portal_count])
       self.portals[i].connections.append(self.portals[(i - 3) % portal_count])
-
+    self.watch.start()
     pre_shortcut_strain = self.get_strain()
 
     for conn in input[2:]:
@@ -44,40 +56,24 @@ class Part2(BasePart):
         a.connections.remove(b)
         b.connections.remove(a)
 
+    self.watch.stop()
     return pre_shortcut_strain - min_strain
 
   def get_strain(self) -> int:
     total = 0
     for p_start in self.portals:
-      p_total = 0
-      for p_end in self.portals:
-        if p_start == p_end:
-          continue
-        p_total += self.dijkstra(p_start, p_end)
-      total += p_total
+      total += self.bfs_total(p_start)
     return total
 
-  def dijkstra(self, start: Portal, end: Portal) -> int:
+  def bfs_total(self, start: Portal) -> int:
+    q = deque([start])
+    dist = {start: 0}
 
-    q = PriorityQueue[PrioritizedItem]()
-    q.put(PrioritizedItem(0, start))
+    while q:
+      p = q.popleft()
+      for c in p.connections:
+        if c not in dist:
+          dist[c] = dist[p] + 1
+          q.append(c)
 
-    dist = {}
-    prev = {}
-    for p in self.portals:
-      dist[p] = sys.maxsize
-      prev[p] = None
-    dist[start] = 0
-
-    while not q.empty():
-      pi = q.get_nowait()
-      if pi.item.id == end.id:
-        return dist[pi.item]
-      for c in pi.item.connections:
-        alt = dist[pi.item] + 1
-        if alt < dist[c]:
-          prev[c] = pi.item
-          dist[c] = alt
-          q.put_nowait(PrioritizedItem(alt, c))
-
-    return -1
+    return sum(dist.values())
