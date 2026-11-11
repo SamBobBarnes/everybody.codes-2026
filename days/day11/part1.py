@@ -39,14 +39,8 @@ class Part1(BasePart):
     for i in range(1, portal_count + 1):
       self.portals.append(Portal(i))
     for i in range(0, portal_count):
-      if i < portal_count - 1:
-        self.portals[i].connections.append(self.portals[i + 1])
-      else:
-        self.portals[i].connections.append(self.portals[0])
-      if i > 0:
-        self.portals[i].connections.append(self.portals[i - 1])
-      else:
-        self.portals[i].connections.append(self.portals[portal_count - 1])
+      self.portals[i].connections.append(self.portals[(i + 1) % portal_count])
+      self.portals[i].connections.append(self.portals[(i - 1) % portal_count])
 
     pre_shortcut_strain = self.get_strain()
 
