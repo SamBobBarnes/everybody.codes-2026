@@ -7,7 +7,7 @@ from days.day11.part1 import Portal
 
 class Part3(BasePart):
   def __init__(self):
-    super().__init__(11, 3, True)
+    super().__init__(11, 3)
     self.portals: list[Portal] = []
 
   def run(self):
