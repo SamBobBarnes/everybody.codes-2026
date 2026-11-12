@@ -37,20 +37,21 @@ class Part2(BasePart):
   def within_shape(self, x, y):
     for s in self.shapes:
       shape_type = self.get_shape_type(s)
-      if shape_type == ShapeType.Rect and self.within_rect(Point(x, y), s[0], s[2]):
-        return True
-      if shape_type == ShapeType.NE and self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[0],
-                                                                                                      s[4]):
-        return True
-      if shape_type == ShapeType.SW and self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[4],
-                                                                                                      s[2]):
-        return True
-      if shape_type == ShapeType.NW and self.within_rect(Point(x, y), s[1], s[3]) or self.within_rect(Point(x, y), s[1],
-                                                                                                      s[5]):
-        return True
-      if shape_type == ShapeType.SE and self.within_rect(Point(x, y), s[1], s[5]) or self.within_rect(Point(x, y), s[3],
-                                                                                                      s[5]):
-        return True
+      if shape_type == ShapeType.Rect:
+        if self.within_rect(Point(x, y), s[0], s[2]):
+          return True
+      if shape_type == ShapeType.NW:
+        if self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[0], s[4]):
+          return True
+      if shape_type == ShapeType.SW:
+        if self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[4], s[2]):
+          return True
+      if shape_type == ShapeType.NE:
+        if self.within_rect(Point(x, y), s[1], s[3]) or self.within_rect(Point(x, y), s[1], s[5]):
+          return True
+      if shape_type == ShapeType.SE:
+        if self.within_rect(Point(x, y), s[1], s[5]) or self.within_rect(Point(x, y), s[3], s[5]):
+          return True
     return False
 
   @staticmethod
@@ -60,13 +61,13 @@ class Part2(BasePart):
 
   @staticmethod
   def get_shape_type(points: list[Point]) -> ShapeType:
-    if len(points) == 4 or len(points) == 1:
+    if len(points) == 4:
       return ShapeType.Rect
 
     if len(points) < 6:
       raise Exception(f'Cant classify shape containing [{",".join(map(lambda x: x.to_string(), points))}]', )
 
-    a = points[2].x - points[3].x
+    a = points[3].x - points[2].x
     b = points[3].y - points[4].y
 
     if a < 0 and b < 0:
@@ -83,27 +84,25 @@ class Part2(BasePart):
     current = Point(x1, y1)
     search_dir = Point.Direction.East
     while True:
-      if current == shape[0]:
-        break  # back at the beginning
-
-      lead = self.is_magma(current.clone().move(search_dir))
+      if len(shape) >= 4 and current == shape[0]:
+        break
       left = self.is_magma(current.clone().move(search_dir.prev()))
-
-      # if lead and not left:  # keep going
-      if left:  # concave corner, turn left
+      if left:
         shape.append(current.clone())
         search_dir = search_dir.prev()
-      elif not lead and not left:  # convex corner, turn right
-        shape.append(current.clone())
-        search_dir = search_dir.next()
-
-      current.move(search_dir)
-      if not self.is_magma(current):  # we have stepped off, turn right
-        current.move(search_dir.reverse())
-        if current == shape[0]:
-          break  # back at the beginning
-        search_dir.next()
         current.move(search_dir)
+        continue
+
+      lead = self.is_magma(current.clone().move(search_dir))
+      if lead:
+        current.move(search_dir)
+        continue
+
+      shape.append(current.clone())
+      search_dir = search_dir.next()
+    self.shapes.append(shape)
 
   def is_magma(self, p: Point):
+    if p.x < 0 or p.y < 0 or p.x == self.width or p.y == self.height:
+      return False
     return self.input[p.y][p.x] == '#'

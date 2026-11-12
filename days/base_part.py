@@ -34,11 +34,11 @@ class Point:
     return Point(self.x, self.y, self.z)
 
   class Direction(Enum):
-    North = 0,
-    East = 1,
-    South = 2,
-    West = 3,
-    Up = 4,
+    North = 0
+    East = 1
+    South = 2
+    West = 3
+    Up = 4
     Down = 5
 
     def prev(self, clockwise: bool = True):
@@ -98,6 +98,7 @@ class Point:
         self.z += 1
       case Point.Direction.Down:
         self.z -= 1
+    return self
 
 
 class BasePart:
