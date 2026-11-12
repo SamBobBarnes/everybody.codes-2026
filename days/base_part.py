@@ -1,4 +1,5 @@
 ﻿import time
+from enum import Enum
 
 
 def get_file(filename) -> str:
@@ -28,6 +29,75 @@ class Point:
 
   def __hash__(self) -> int:
     return hash((self.x, self.y, self.z))
+
+  def clone(self):
+    return Point(self.x, self.y, self.z)
+
+  class Direction(Enum):
+    North = 0,
+    East = 1,
+    South = 2,
+    West = 3,
+    Up = 4,
+    Down = 5
+
+    def prev(self, clockwise: bool = True):
+      return self.next(not clockwise)
+
+    def next(self, clockwise: bool = True):
+      match self:
+        case Point.Direction.North:
+          if clockwise:
+            return self.East
+          else:
+            return self.West
+        case Point.Direction.East:
+          if clockwise:
+            return self.South
+          else:
+            return self.North
+        case Point.Direction.South:
+          if clockwise:
+            return self.West
+          else:
+            return self.East
+        case Point.Direction.West:
+          if clockwise:
+            return self.North
+          else:
+            return self.South
+        case _:
+          raise Exception(f"Cannot get next of {self} in 2d")
+
+    def reverse(self):
+      match self:
+        case Point.Direction.North:
+          return self.South
+        case Point.Direction.East:
+          return self.West
+        case Point.Direction.South:
+          return self.North
+        case Point.Direction.West:
+          return self.East
+        case Point.Direction.Up:
+          return self.Down
+        case Point.Direction.Down:
+          return self.Up
+
+  def move(self, direction: Direction):
+    match direction:
+      case Point.Direction.North:
+        self.y -= 1
+      case Point.Direction.East:
+        self.x += 1
+      case Point.Direction.South:
+        self.y += 1
+      case Point.Direction.West:
+        self.x -= 1
+      case Point.Direction.Up:
+        self.z += 1
+      case Point.Direction.Down:
+        self.z -= 1
 
 
 class BasePart:
