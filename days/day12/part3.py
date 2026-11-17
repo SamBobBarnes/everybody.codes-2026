@@ -167,6 +167,26 @@ class Part3(BasePart):
 
       shape.append(current.clone())
       search_dir = search_dir.next()
+
+    if len(shape):
+      # find inner space if present
+      found_x = False
+      for y in range(shape[0].y+1):
+        within = False
+        if not found_x:
+          for x in range(shape[0].x+1):
+            if not within and not self.is_magma(Point(x,y)):
+              within = True
+              shape.append(Point(x,y))
+            if within and self.is_magma(Point(x,y)):
+              shape.append(Point(x-1,y))
+              break
+        else:
+          if self.is_magma(Point(shape[4].x,y)):
+            shape.append(Point(shape[5].x,y-1))
+            shape.append(Point(shape[4].x,y-1))
+            break
+
     self.shapes.append(shape)
 
   def is_magma(self, p: Point):
