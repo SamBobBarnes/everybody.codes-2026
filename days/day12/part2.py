@@ -27,28 +27,54 @@ class Part2(BasePart):
 
     total = 0
     for s in self.shapes:
-      total += self.most_efficient_cut(s)
+      min_cuts = self.most_efficient_cut(s)
+      print(f"{min_cuts} cuts for shape {s}")
+      self.print_shape(s)
+      total += 0
 
     return f"{total}"
 
+  def print_shape(self,shape:list[Point]):
+    x_s = map(lambda x: x.x,shape)
+    y_s = map(lambda x: x.y,shape)
+    min_x = min(x_s)
+    max_x = max(x_s)
+    min_y = min(y_s)
+    max_y = max(y_s)
+    width = max_x - min_x + 1
+    height = max_y - min_y + 1
+
+    for y in range(0,height):
+      row = ""
+      for x in range(0,width):
+        if self.within_single_shape(shape,x+min_x,y+min_y):
+          row += "#"
+        else:
+          row += " "
+
   def within_shape(self, x, y):
     for s in self.shapes:
-      shape_type = self.get_shape_type(s)
-      if shape_type == ShapeType.Rect:
-        if self.within_rect(Point(x, y), s[0], s[2]):
-          return True
-      if shape_type == ShapeType.NW:
-        if self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[0], s[4]):
-          return True
-      if shape_type == ShapeType.SW:
-        if self.within_rect(Point(x, y), s[1], s[5]) or self.within_rect(Point(x, y), s[3], s[5]):
-          return True
-      if shape_type == ShapeType.NE:
-        if self.within_rect(Point(x, y), s[1], s[3]) or self.within_rect(Point(x, y), s[1], s[5]):
-          return True
-      if shape_type == ShapeType.SE:
-        if self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[4], s[2]):
-          return True
+      if self.within_single_shape(s,x,y):
+        return True
+    return False
+
+  def within_single_shape(self,s:list[Point],x,y):
+    shape_type = self.get_shape_type(s)
+    if shape_type == ShapeType.Rect:
+      if self.within_rect(Point(x, y), s[0], s[2]):
+        return True
+    if shape_type == ShapeType.NW:
+      if self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[0], s[4]):
+        return True
+    if shape_type == ShapeType.SW:
+      if self.within_rect(Point(x, y), s[1], s[5]) or self.within_rect(Point(x, y), s[3], s[5]):
+        return True
+    if shape_type == ShapeType.NE:
+      if self.within_rect(Point(x, y), s[1], s[3]) or self.within_rect(Point(x, y), s[1], s[5]):
+        return True
+    if shape_type == ShapeType.SE:
+      if self.within_rect(Point(x, y), s[0], s[2]) or self.within_rect(Point(x, y), s[4], s[2]):
+        return True
     return False
 
   def most_efficient_cut(self, s: list[Point]) -> int:

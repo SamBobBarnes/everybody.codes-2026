@@ -19,6 +19,9 @@ class Point:
   def __str__(self):
     return f"({self.x},{self.y},{self.z})"
 
+  def __repr__(self):
+    return self.__str__()
+
   def to_string(self):
     return self.__str__()
 
