@@ -19,7 +19,7 @@ class Part2(BasePart):
     self.width = len(self.input[0])
     self.height = len(self.input)
 
-  def run(self):
+  def run(self) -> str:
     for y, row in enumerate(self.input):
       for x, char in enumerate(row):
         if char == "#" and not self.within_shape(x, y):
@@ -29,7 +29,7 @@ class Part2(BasePart):
     for s in self.shapes:
       total += self.most_efficient_cut(s)
 
-    return total
+    return f"{total}"
 
   def within_shape(self, x, y):
     for s in self.shapes:
