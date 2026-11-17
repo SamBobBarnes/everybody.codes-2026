@@ -1,10 +1,12 @@
 from days.base_part import BasePart
 
 class Part1(BasePart):
-    def __init__(self):
-        super().__init__(13,1,True)
+  def __init__(self):
+    super().__init__(13,1,True)
 
-    # def run(self):
-    #     input = self.get_input()
-    #     for line in input:
-    #         print(line)
+  def run(self) -> str:
+    input = self.get_input_lines()
+    for line in input:
+      print(line)
+
+    return "hi"
