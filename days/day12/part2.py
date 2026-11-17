@@ -28,22 +28,21 @@ class Part2(BasePart):
     total = 0
     for s in self.shapes:
       min_cuts = self.most_efficient_cut(s)
-      print(f"{min_cuts} cuts for shape {s}")
-      self.print_shape(s)
-      total += 0
+      # print(f"{min_cuts} cuts for shape {s}")
+      # self.print_shape(s)
+      total += min_cuts
 
     return f"{total}"
 
   def print_shape(self,shape:list[Point]):
-    x_s = map(lambda x: x.x,shape)
-    y_s = map(lambda x: x.y,shape)
-    min_x = min(x_s)
-    max_x = max(x_s)
-    min_y = min(y_s)
-    max_y = max(y_s)
+    min_x = min(map(lambda x: x.x,shape))
+    max_x = max(map(lambda x: x.x,shape))
+    min_y = min(map(lambda x: x.y,shape))
+    max_y = max(map(lambda x: x.y,shape))
     width = max_x - min_x + 1
     height = max_y - min_y + 1
 
+    shape_str = ""
     for y in range(0,height):
       row = ""
       for x in range(0,width):
@@ -51,6 +50,9 @@ class Part2(BasePart):
           row += "#"
         else:
           row += " "
+      row += "\n"
+      shape_str += row
+    print(shape_str)
 
   def within_shape(self, x, y):
     for s in self.shapes:
@@ -85,9 +87,9 @@ class Part2(BasePart):
         return min(width, height)
       case ShapeType.NE:
         height = max(s[0].y, s[1].y, s[2].y, s[3].y, s[4].y, s[5].y) - min(s[0].y, s[1].y, s[2].y, s[3].y, s[4].y,
-                                                                           s[5].y)
+                                                                           s[5].y) + 1
         width = max(s[0].x, s[1].x, s[2].x, s[3].x, s[4].x, s[5].x) - min(s[0].x, s[1].x, s[2].x, s[3].x, s[4].x,
-                                                                          s[5].x)
+                                                                          s[5].x) + 1
 
         height_p = s[5].y - s[1].y + 1
         width_p = s[1].x - s[3].x + 1
