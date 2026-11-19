@@ -1,3 +1,5 @@
+from fractions import Fraction
+
 from days.base_part import BasePart
 
 def mod_one(x:float) -> float:
@@ -5,7 +7,7 @@ def mod_one(x:float) -> float:
 
 class Part1(BasePart):
   def __init__(self):
-    super().__init__(13,1,True)
+    super().__init__(13,1)
     input = self.get_input_lines()
     self.hands = list(map(lambda x: int(x),input[0][6:].split(":")))
     self.clockwise = list(map(lambda x: x == "CW",input[1][10:].split(":")))
@@ -16,63 +18,49 @@ class Part1(BasePart):
 
     total = 0
     for t in range(0,max(self.moves)):
-      movements:list[tuple[int,int,bool]] = [] # (current,total,stopped)
-      for i in range(0,len(self.hands)):
-        if self.moves[i] <= t:
-          movements.append((self.pos[i],self.hands[i],True))
-          continue
-        self.pos[i] = self.next(i,self.pos[i])
-        movements.append((self.pos[i],self.hands[i],False))
 
-      for a_i in range(0,len(movements)-1):
-        for b_i in range(a_i+1,len(movements)):
-          a = movements[a_i]
-          b = movements[b_i]
-          if a[2] and b[2]: #both stopped
+      for a_i in range(0,len(self.hands)-1):
+        for b_i in range(a_i+1,len(self.hands)):
+          a_stopped = self.moves[a_i] <= t
+          b_stopped = self.moves[b_i] <= t
+          if a_stopped and b_stopped: #both stopped
+            print(f"{t}s ({total}): {a_i+1} and {b_i+1} are both stopped.S")
             continue
 
-          a_min = self.prev(a_i,a[0])
-          a_max = a[0]
-          a_start = a_min/a[1]
-          a_end = a_max/a[1]
+          a_pos = self.pos[a_i]
+          a_start = Fraction(a_pos,self.hands[a_i])
           a_cw = self.clockwise[a_i]
-          a_speed = 1/a[1]
-          
-
-          b_min = self.prev(b_i,b[0])
-          b_max = b[0]
-          b_start = b_min/b[1]
-          b_end = b_max/b[1]
-          b_cw = self.clockwise[b_i]
-          b_speed = 1/b[1]
-
-          if a[2]:
-            a_speed = 0
-            a_start = a_end
-            if (b_cw and (mod_one(a_start - b_start) / b_speed) < 1.0) or (not b_cw and (mod_one(b_start - a_start) / b_speed) < 1.0):
-              total += 1
-              continue
-          
-          if b[2]:
-            b_speed = 0
-            b_start = b_end
-            if (a_cw and (mod_one(b_start - a_start) / a_speed) < 1.0) or (not a_cw and (mod_one(a_start - b_start) / a_speed) < 1.0):
-              total += 1
-              continue
-          
-
-          if a_speed > b_speed:
-            f_speed = a_speed
-            s_speed = b_speed
-            f_start = a_start
-            s_start = b_start
+          if a_stopped:
+            a_speed = Fraction(0)
           else:
-            f_speed = b_speed
-            s_speed = a_speed
-            f_start = b_start
-            s_start = a_start
+            a_speed = Fraction(1,self.hands[a_i])
           
+
+          b_pos = self.pos[b_i]
+          b_start = Fraction(b_pos,self.hands[b_i])
+          b_cw = self.clockwise[b_i]
+          if b_stopped:
+            b_speed = Fraction(0)
+          else:
+            b_speed = Fraction(1,self.hands[b_i])
+
           starting_gap = self.calc_gap(a_start,b_start,a_speed,b_speed,a_cw,b_cw)
+          if starting_gap == 0 and t > 0:
+            total += 1
+          ttp = self.time_to_pass(starting_gap,a_speed,b_speed,a_cw,b_cw)
+          if starting_gap > 0 and 0 < ttp < 1:
+            total += 1
+          if t == max(self.moves)-1 and ttp == 1:
+            total +=1
+
+          print(f"{t}s ({total}): {a_i+1} and {b_i+1} are {str(starting_gap.numerator).rjust(2)}/{str(starting_gap.denominator).ljust(2)}u apart. TTP: {ttp.real}s")
+
+      for i in range(0,len(self.hands)):
+        if self.moves[i] <= t:
+          continue
+        self.pos[i] = self.next(i,self.pos[i])
+
+
           
 
 
@@ -80,7 +68,7 @@ class Part1(BasePart):
     return f"{total}"  
 
   @staticmethod
-  def calc_gap(a_start:float,b_start:float,a_speed:float,b_speed:float,a_cw:bool,b_cw:bool)->float:
+  def calc_gap(a_start:Fraction,b_start:Fraction,a_speed:Fraction,b_speed:Fraction,a_cw:bool,b_cw:bool)->Fraction:
 
     sorted = Part1.max_speed(a_start,b_start,a_speed,b_speed,a_cw,b_cw)
 
@@ -97,15 +85,15 @@ class Part1(BasePart):
     return dist
 
   @staticmethod
-  def time_to_pass(gap:float,a_speed:float,b_speed:float,a_cw:bool,b_cw:bool)->float:
-    sorted = Part1.max_speed(0,0,a_speed,b_speed,a_cw,b_cw)
+  def time_to_pass(gap:Fraction,a_speed:Fraction,b_speed:Fraction,a_cw:bool,b_cw:bool)->float:
+    sorted = Part1.max_speed(Fraction(0),Fraction(0),a_speed,b_speed,a_cw,b_cw)
     if a_cw == b_cw:
       return gap/(sorted["f_speed"] - sorted["s_speed"])
     else:
       return gap/(sorted["f_speed"] + sorted["s_speed"])
 
   @staticmethod
-  def max_speed(a_start:float,b_start:float,a_speed:float,b_speed:float,a_cw:bool,b_cw:bool):
+  def max_speed(a_start:Fraction,b_start:Fraction,a_speed:Fraction,b_speed:Fraction,a_cw:bool,b_cw:bool):
     if a_speed > b_speed:
       return {
       "f_start" : a_start,
