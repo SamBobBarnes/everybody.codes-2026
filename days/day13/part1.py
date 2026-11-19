@@ -2,9 +2,6 @@ from fractions import Fraction
 
 from days.base_part import BasePart
 
-def mod_one(x:float) -> float:
-  return ((x % 1.0) + 1.0) % 1.0
-
 class Part1(BasePart):
   def __init__(self):
     super().__init__(13,1)
@@ -24,7 +21,7 @@ class Part1(BasePart):
           a_stopped = self.moves[a_i] <= t
           b_stopped = self.moves[b_i] <= t
           if a_stopped and b_stopped: #both stopped
-            print(f"{t}s ({total}): {a_i+1} and {b_i+1} are both stopped.S")
+            # print(f"{t}s ({total}): {a_i+1} and {b_i+1} are both stopped.")
             continue
 
           a_pos = self.pos[a_i]
@@ -53,7 +50,7 @@ class Part1(BasePart):
           if t == max(self.moves)-1 and ttp == 1:
             total +=1
 
-          print(f"{t}s ({total}): {a_i+1} and {b_i+1} are {str(starting_gap.numerator).rjust(2)}/{str(starting_gap.denominator).ljust(2)}u apart. TTP: {ttp.real}s")
+          # print(f"{t}s ({total}): {a_i+1} and {b_i+1} are {str(starting_gap.numerator).rjust(2)}/{str(starting_gap.denominator).ljust(2)}u apart. TTP: {ttp.real}s")
 
       for i in range(0,len(self.hands)):
         if self.moves[i] <= t:

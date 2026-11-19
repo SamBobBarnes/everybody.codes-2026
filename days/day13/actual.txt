@@ -1,0 +1,299 @@
+hands 7:7:26
+meetings 1597
+
+hands 4:13:23
+meetings 1394
+
+hands 9:5:26
+meetings 1950
+
+hands 9:10:21
+meetings 1393
+
+hands 8:5:27
+meetings 2387
+
+hands 5:9:26
+meetings 1543
+
+hands 5:11:24
+meetings 1849
+
+hands 6:4:30
+meetings 2663
+
+hands 8:11:21
+meetings 1464
+
+hands 6:4:30
+meetings 2648
+
+hands 5:10:25
+meetings 1843
+
+hands 4:13:23
+meetings 1397
+
+hands 9:10:21
+meetings 510
+
+hands 9:11:20
+meetings 1181
+
+hands 7:7:26
+meetings 1157
+
+hands 6:8:26
+meetings 1406
+
+hands 8:4:28
+meetings 1711
+
+hands 5:10:25
+meetings 1661
+
+hands 8:12:20
+meetings 1128
+
+hands 8:8:24
+meetings 851
+
+hands 6:5:29
+meetings 2526
+
+hands 5:10:25
+meetings 1082
+
+hands 9:9:22
+meetings 1304
+
+hands 5:10:25
+meetings 1375
+
+hands 6:4:30
+meetings 1411
+
+hands 9:11:20
+meetings 969
+
+hands 7:10:23
+meetings 1787
+
+hands 9:9:22
+meetings 851
+
+hands 9:11:20
+meetings 1181
+
+hands 9:5:26
+meetings 1243
+
+hands 9:12:19
+meetings 1156
+
+hands 5:13:22
+meetings 917
+
+hands 9:11:20
+meetings 1270
+
+hands 4:7:29
+meetings 1835
+
+hands 4:13:23
+meetings 2255
+
+hands 9:6:25
+meetings 903
+
+hands 6:5:29
+meetings 2081
+
+hands 7:7:26
+meetings 1587
+
+hands 5:11:24
+meetings 2165
+
+hands 9:10:21
+meetings 507
+
+hands 7:14:19
+meetings 1374
+
+hands 7:12:21
+meetings 1117
+
+hands 9:4:27
+meetings 2229
+
+hands 9:6:25
+meetings 1509
+
+hands 5:7:28
+meetings 1093
+
+hands 6:11:23
+meetings 1323
+
+hands 7:14:19
+meetings 535
+
+hands 9:14:17
+meetings 1170
+
+hands 7:13:20
+meetings 1650
+
+hands 7:14:19
+meetings 627
+
+hands 6:9:25
+meetings 1646
+
+hands 5:14:21
+meetings 1679
+
+hands 7:14:19
+meetings 767
+
+hands 7:7:26
+meetings 1139
+
+hands 5:12:23
+meetings 1345
+
+hands 7:12:21
+meetings 1468
+
+hands 6:4:30
+meetings 1581
+
+hands 4:4:32
+meetings 1349
+
+hands 5:10:25
+meetings 1003
+
+hands 5:8:27
+meetings 1968
+
+hands 9:5:26
+meetings 1732
+
+hands 7:8:25
+meetings 1401
+
+hands 4:4:32
+meetings 3503
+
+hands 9:11:20
+meetings 945
+
+hands 4:12:24
+meetings 2411
+
+hands 5:13:22
+meetings 1263
+
+hands 9:10:21
+meetings 1328
+
+hands 8:12:20
+meetings 1106
+
+hands 4:9:27
+meetings 2154
+
+hands 8:12:20
+meetings 1253
+
+hands 5:7:28
+meetings 1998
+
+hands 6:12:22
+meetings 1902
+
+hands 7:7:26
+meetings 1776
+
+hands 7:7:26
+meetings 636
+
+hands 6:13:21
+meetings 1188
+
+hands 4:7:29
+meetings 1617
+
+hands 8:11:21
+meetings 1273
+
+hands 4:7:29
+meetings 2289
+
+hands 6:14:20
+meetings 1394
+
+hands 6:14:20
+meetings 1240
+
+hands 7:7:26
+meetings 1748
+
+hands 9:10:21
+meetings 1221
+
+hands 8:4:28
+meetings 1748
+
+hands 5:10:25
+meetings 1501
+
+hands 8:13:19
+meetings 1095
+
+hands 6:11:23
+meetings 1641
+
+hands 4:13:23
+meetings 1353
+
+hands 6:4:30
+meetings 2084
+
+hands 8:6:26
+meetings 1617
+
+hands 4:11:25
+meetings 1695
+
+hands 6:6:6
+meetings 0
+
+hands 10:10:10
+meetings 0
+
+hands 3:3:3
+meetings 2
+
+hands 5:7:4
+meetings 3
+
+hands 6:8:12
+meetings 5
+
+hands 6:8:12
+meetings 7
+
+hands 6:8:12
+meetings 9
+
+hands 4:5:7
+meetings 3
+
+hands 5:7:9
+meetings 4
+
+hands 8:8:8
+meetings 8
