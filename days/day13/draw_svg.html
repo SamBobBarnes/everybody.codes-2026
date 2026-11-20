@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>Clock Viewer</title>
+    </head>
+    <body style="background-color: black;">
+        <svg id="clock" viewBox="0 0 100 100" width="100%" style="width: 100%; transform: rotate(-90deg)" transition="transform 2s" id="clock">
+            <circle cx="50" cy="50" r="40"
+                fill="black" 
+                stroke="white" 
+                stroke-width="1"  />
+
+            <circle cx="50" cy="50" r="1" 
+                fill="white"  />
+
+        </svg>
+        
+
+        <script>
+            const clock = document.getElementById("clock");
+
+            function getCircleCoord(angle, radius = 33){
+                const h = 50;
+                const k = 50;
+
+                const x = h + radius * Math.cos(angle);
+                const y = k + radius * Math.sin(angle);
+                return {x, y};
+            }
+
+            function drawLine(numerator,denominator,color,number){
+                const angle = (numerator / denominator) * 360 *Math.PI/180;
+                const innerCoord = getCircleCoord(angle,1);
+                const outerCoord = getCircleCoord(angle);
+                const idCoord = getCircleCoord(angle, 37);
+                clock.innerHTML += `
+                    <line
+                        x1="${innerCoord.x}" y1="${innerCoord.y}"
+                        x2="${outerCoord.x}" y2="${outerCoord.y}"
+                        stroke="${color}"
+                        stroke-width=".5"  />
+                    <circle 
+                        cx="${idCoord.x}" 
+                        cy="${idCoord.y}" 
+                        r="4" fill="black" 
+                        stroke="${color}" 
+                        stroke-width=".5" />
+                    <text x=${idCoord.x} y=${idCoord.y} style="font-size:20px; color:whiteerdfstwerdfswerdderfgshfgrtyerdftserdftgswedrfg">${number}</text>
+                    `;
+            }
+
+
+            drawLine(1, 1,"#0087ff",1);
+
+
+        </script>
+
+    </body>
+</html>
