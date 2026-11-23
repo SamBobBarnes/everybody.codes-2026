@@ -1,58 +1,334 @@
 <html>
-    <head>
-        <title>Clock Viewer</title>
-    </head>
-    <body style="background-color: black;">
-        <svg id="clock" viewBox="0 0 100 100" width="100%" style="width: 100%; transform: rotate(-90deg)" transition="transform 2s" id="clock">
-            <circle cx="50" cy="50" r="40"
-                fill="black" 
-                stroke="white" 
-                stroke-width="1"  />
 
-            <circle cx="50" cy="50" r="1" 
-                fill="white"  />
+<head>
+    <title>Clock Viewer</title>
+    <style>
+        input {
+            width: 3rem;
+            text-align: right;
+        }
 
-        </svg>
-        
+        body {
+            color: white
+        }
 
-        <script>
-            const clock = document.getElementById("clock");
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
 
-            function getCircleCoord(angle, radius = 33){
-                const h = 50;
-                const k = 50;
+        .num-separator {
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: -.2rem
+        }
 
-                const x = h + radius * Math.cos(angle);
-                const y = k + radius * Math.sin(angle);
-                return {x, y};
+        #counter {
+            font-weight: bold;
+            font-size: 5rem;
+            margin-right: 3rem;
+        }
+    </style>
+</head>
+
+<body style="background-color: black;">
+    <svg id="clock" viewBox="0 0 100 100" width="100%" style="width: 100%; transform: rotate(-90deg)"
+        transition="transform 2s" id="clock">
+
+
+    </svg>
+    <div style="display:flex; flex-direction: row; justify-content: space-between;">
+        <div id="controls">
+            <div>
+                <div class="input-group">
+                    <input type="number" id="hand0numerator" value="1" />
+                    <div class="num-separator">/</div>
+                    <input type="number" id="hand0denominator" value="2" />
+                    <div class="num-separator">-</div>
+                    <input type="number" id="hand0count" value="5" />
+                    <div class="num-separator">&orarr;</div>
+                    <input type="checkbox" id="hand0cw" checked="true" />
+                </div>
+                <div class="input-group">
+                    <input type="number" id="hand1numerator" value="2" />
+                    <div class="num-separator">/</div>
+                    <input type="number" id="hand1denominator" value="3" />
+                    <div class="num-separator">-</div>
+                    <input type="number" id="hand1count" value="5" />
+                    <div class="num-separator">&orarr;</div>
+                    <input type="checkbox" id="hand1cw" checked="true" />
+                </div>
+                <div class="input-group">
+                    <input type="number" id="hand2numerator" value="3" />
+                    <div class="num-separator">/</div>
+                    <input type="number" id="hand2denominator" value="5" />
+                    <div class="num-separator">-</div>
+                    <input type="number" id="hand2count" value="5" />
+                    <div class="num-separator">&orarr;</div>
+                    <input type="checkbox" id="hand2cw" checked="true" />
+                </div>
+            </div>
+            <div>
+                <button id="stepButton">Step</button>
+                <button id="playButton">Play</button>
+                <button id="resetButton">Reset</button>
+            </div>
+        </div>
+        <div>
+            <span id="counter">0</span>
+        </div>
+    </div>
+
+    <script>
+
+
+        const clock = document.getElementById("clock");
+
+        const clockSvgElements = `<circle cx="50" cy="50" r="42" fill="black" stroke="white" stroke-width=".25" />
+            <circle cx="50" cy="50" r="1" fill="white" />`
+
+        let currentStep = 0
+        let canStep = true
+
+        function incCounter() {
+            const counter = document.getElementById("counter")
+            currentStep += 1
+            console.log({currentStep})
+            counter.innerHTML = currentStep
+        }
+
+        function resetCounter() {
+            const counter = document.getElementById("counter")
+            currentStep = 0
+            counter.innerHTML = currentStep
+        }
+
+        const stepButton = document.getElementById("stepButton")
+        stepButton.addEventListener("click", step)
+        const playButton = document.getElementById("playButton")
+        playButton.addEventListener("click", play)
+        const resetButton = document.getElementById("resetButton")
+        resetButton.addEventListener("click", reset)
+
+        let hands = []
+        let intervals = []
+
+        class Color {
+            static Blue = "#0087ff";
+            static Red = "#ff0000";
+            static Yellow = "#ffff00";
+
+            static forNumber = (number) => {
+                switch (number) {
+                    case 0: return Color.Blue;
+                    case 1: return Color.Red;
+                    case 2: return Color.Yellow;
+                    default: throw new Error(`Number (${number}) is not valid.`);
+                }
+            };
+        }
+
+        reset()
+
+        function reset() {
+            canStep = true
+            intervals.forEach((id) => clearInterval(id))
+            intervals = []
+            hands = []
+            resetCounter()
+            for (let i = 0; i < 3; i++) {
+                const numControl = document.getElementById(`hand${i}numerator`)
+                numControl.removeEventListener("change", reset)
+                numControl.addEventListener('change', reset)
+                const denControl = document.getElementById(`hand${i}denominator`)
+                denControl.removeEventListener("change", reset)
+                denControl.addEventListener('change', reset)
+                const countControl = document.getElementById(`hand${i}count`)
+                countControl.removeEventListener("change", reset)
+                countControl.addEventListener('change', reset)
+                const cwControl = document.getElementById(`hand${i}cw`)
+                cwControl.removeEventListener("change", reset)
+                cwControl.addEventListener('change', reset)
+                hands.push(
+                    {
+                        id: i,
+                        numerator: parseInt(numControl.value),
+                        denominator: parseInt(denControl.value),
+                        count: parseInt(countControl.value),
+                        clockwise: cwControl.checked,
+                    }
+                )
             }
 
-            function drawLine(numerator,denominator,color,number){
-                const angle = (numerator / denominator) * 360 *Math.PI/180;
-                const innerCoord = getCircleCoord(angle,1);
-                const outerCoord = getCircleCoord(angle);
-                const idCoord = getCircleCoord(angle, 37);
+
+            clock.innerHTML = clockSvgElements
+
+            hands.forEach((hand) => {
+                drawIncrements(hand.denominator, hand.id)
+                drawHand(hand.numerator, hand.denominator, hand.id)
+            })
+        }
+
+        function step() {
+            if (!canStep) {
+                console.log("cant step rn")
+                return
+            }
+            canStep = false
+            hands.forEach((hand, index) => {
+                if (currentStep < hand.count) {
+                    nextHand = moveHand(hand.id, hand.numerator, hand.denominator, hand.clockwise, 1)
+                    hands[index].numerator = nextHand.numerator
+                    console.log(hands[index])
+                }
+            })
+            setTimeout(() => {
+                canStep = true
+                incCounter()
+            }, 2500)
+        }
+
+        function play() {
+            reset()
+            canStep = false
+            hands.forEach(hand => {
+                moveHand(hand.id, hand.numerator, hand.denominator, hand.clockwise, hand.count)
+            })
+            console.log({hands})
+            const maxCount = hands.reduce((prev,current) => {
+                if(current.count > prev.count) return current
+                return prev
+            }).count
+            console.log(`stopping after ${maxCount} steps`)
+            incId = setInterval(incCounter, 2500)
+            setTimeout(()=>{
+                clearInterval(incId)
+            },(maxCount*2500))
+
+        }
+
+        function getCircleCoord(angle, radius = 33) {
+            const h = 50;
+            const k = 50;
+
+            const x = h + radius * Math.cos(angle);
+            const y = k + radius * Math.sin(angle);
+            return { x, y };
+        }
+
+        function calcAngle(numerator, denominator) {
+            return (numerator / denominator) * 360 * Math.PI / 180;
+        }
+
+        function drawIncrements(denominator, number) {
+            const color = Color.forNumber(number);
+            for (let i = 0; i < denominator; i++) {
+                const angle = calcAngle(i, denominator)
+                const innerCoord = getCircleCoord(angle, 27 - number * 6);
+                const outerCoord = getCircleCoord(angle, 32 - number * 6);
                 clock.innerHTML += `
                     <line
                         x1="${innerCoord.x}" y1="${innerCoord.y}"
                         x2="${outerCoord.x}" y2="${outerCoord.y}"
                         stroke="${color}"
-                        stroke-width=".5"  />
+                        stroke-width=".75"  />
+                `;
+            }
+        }
+
+        function drawHand(numerator, denominator, number) {
+            const color = Color.forNumber(number);
+            const angle = calcAngle(numerator, denominator);
+            const innerCoord = getCircleCoord(angle, 1);
+            const outerCoord = getCircleCoord(angle);
+            const idCoord = getCircleCoord(angle, 37);
+            clock.innerHTML += `
+                    <line
+                        id="hand${number}"
+                        x1="${innerCoord.x}" y1="${innerCoord.y}"
+                        x2="${outerCoord.x}" y2="${outerCoord.y}"
+                        stroke="${color}"
+                        stroke-width=".25"  />
                     <circle 
+                        id="id${number}"
                         cx="${idCoord.x}" 
                         cy="${idCoord.y}" 
-                        r="4" fill="black" 
+                        r="${4 - number * .4}" fill="transparent" 
                         stroke="${color}" 
-                        stroke-width=".5" />
-                    <text x=${idCoord.x} y=${idCoord.y} style="font-size:20px; color:whiteerdfstwerdfswerdderfgshfgrtyerdftserdftgswedrfg">${number}</text>
+                        stroke-width=".25" />
+                    <text id="idText${number}" x=${idCoord.x} y=${idCoord.y} font-size="6" transform="rotate(90,${idCoord.x - 1},${idCoord.y - 1})" text-anchor="middle" fill="white">${number}</text>
                     `;
+        }
+
+        function moveHand(number, numerator, denominator, clockwise, count = 1) {
+            const goal = count * 40 //run each step for 2 secs
+            console.log(`${number}: ${numerator}/${denominator} -> ${(clockwise ? numerator + 1 : numerator - 1) % denominator}/${denominator}`)
+            let i = 0
+            const subNumerator = numerator * 40
+            let currentSubNumerator = subNumerator
+            const subDenominator = denominator * 40
+            let currentAngle = calcAngle(numerator, denominator)
+            let ids = []
+            for (let c = 0; c < count; c++) {
+                setTimeout(() => {
+                    ids.push(setInterval(() => moveInterval(c), 50)) // 40 steps per tick
+                    intervals.push(ids[-1])
+                }, c * 2500)
             }
+            const next = { id: number, numerator: (clockwise ? numerator + 1 : numerator - 1) % denominator, denominator }
+            console.log({ next })
+            return next
+
+            function moveInterval(index) {
+                if (i == 40) {
+                    clearInterval(ids[index])
+                    i = 0
+                    return
+                }
+
+                currentSubNumerator += clockwise ? 1 : -1
+                if (currentSubNumerator < 0) {
+                    currentSubNumerator = subDenominator - 1
+                }
+                else if (currentSubNumerator == subDenominator) {
+                    currentSubNumerator = 0
+                }
+
+                // console.log(`${number}: ${currentSubNumerator}/${subDenominator}`)
+
+                hand = document.getElementById(`hand${number}`)
+                handId = document.getElementById(`id${number}`)
+                handIdText = document.getElementById(`idText${number}`)
+
+                const newAngle = calcAngle(currentSubNumerator, subDenominator)
+                const innerCoord = getCircleCoord(newAngle, 1)
+                const outerCoord = getCircleCoord(newAngle)
+                const idCoord = getCircleCoord(newAngle, 37)
+                hand.setAttribute('x1', innerCoord.x)
+                hand.setAttribute('y1', innerCoord.y)
+                hand.setAttribute('x2', outerCoord.x)
+                hand.setAttribute('y2', outerCoord.y)
+                handId.setAttribute('cx', idCoord.x)
+                handId.setAttribute('cy', idCoord.y)
+                handIdText.setAttribute('x', idCoord.x)
+                handIdText.setAttribute('y', idCoord.y)
+                handIdText.setAttribute('transform', `rotate(90,${idCoord.x - 1},${idCoord.y - 1})`)
+
+                i++
+            }
+        }
+
+        // setTimeout(() => {
+        //     moveHand(0, 1, 4, true, 1)
+        //     moveHand(1, 3, 5, false, 1)
+        //     moveHand(2, 9, 20, true, 1)
+        // }, 2000)
 
 
-            drawLine(1, 1,"#0087ff",1);
 
+    </script>
 
-        </script>
+</body>
 
-    </body>
 </html>
