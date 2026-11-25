@@ -15,12 +15,14 @@ class Part2(BasePart):
     total = 0
 
     for clock_i in range(0,len(self.input),5):
+      print()
       clock_meetings = 0
       self.hands = list(map(lambda x: int(x),self.input[clock_i][6:].split(":")))
       self.clockwise = list(map(lambda x: x == "CW",self.input[clock_i+1][10:].split(":")))
       self.pos = list(map(lambda x: int(x),self.input[clock_i+2][8:].split(":")))
       self.moves = list(map(lambda x: int(x),self.input[clock_i+3][5:].split(":")))
-      for t in range(0,max(self.moves)):
+      max_moves = max(self.moves)
+      for t in range(0,max_moves):
 
         for a_i in range(0,len(self.hands)-1):
           for b_i in range(a_i+1,len(self.hands)):
@@ -29,7 +31,7 @@ class Part2(BasePart):
             if a_stopped and b_stopped: #both stopped
               # print(f"{t}s ({total}): {a_i+1} and {b_i+1} are both stopped.")
               continue
-            if self.hands[a_i] == self.hands[b_i] and self.clockwise[a_i] == self.clockwise[b_i]:
+            if self.hands[a_i] == self.hands[b_i] and self.clockwise[a_i] == self.clockwise[b_i] and self.moves[a_i] == self.moves[b_i]:
               continue
 
             a_pos = self.pos[a_i]
@@ -51,12 +53,12 @@ class Part2(BasePart):
 
             starting_gap = self.calc_gap(a_start,b_start,a_speed,b_speed,a_cw,b_cw)
             if starting_gap == 0 and t > 0:
-              clock_meetings += 1
+              clock_meetings += 1 # hands started together and it is not the first turn
             ttp = self.time_to_pass(starting_gap,a_speed,b_speed,a_cw,b_cw)
             if starting_gap > 0 and 0 < ttp < 1:
-              clock_meetings += 1
-            if t == max(self.moves)-1 and ttp == 1:
-              clock_meetings +=1
+              clock_meetings += 1 # hands meet sometime in their arc but do not land on the same spot
+            if (t == self.moves[a_i]-1 or t== self.moves[b_i]-1) and ttp == 1 :
+              clock_meetings +=1 # hands ending in the same spot are counted if it is the last turn
 
             # print(f"{t}s ({total}): {a_i+1} and {b_i+1} are {str(starting_gap.numerator).rjust(2)}/{str(starting_gap.denominator).ljust(2)}u apart. TTP: {ttp.real}s")
 

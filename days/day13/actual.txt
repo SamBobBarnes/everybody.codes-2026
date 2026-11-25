@@ -8,7 +8,7 @@ hands 9:5:26
 meetings 1950
 
 hands 9:10:21
-meetings 1393
+meetings 1394
 
 hands 8:5:27
 meetings 2387
@@ -29,7 +29,7 @@ hands 6:4:30
 meetings 2648
 
 hands 5:10:25
-meetings 1843
+meetings 1844
 
 hands 4:13:23
 meetings 1397
@@ -41,22 +41,22 @@ hands 9:11:20
 meetings 1181
 
 hands 7:7:26
-meetings 1157
+meetings 1181
 
 hands 6:8:26
 meetings 1406
 
 hands 8:4:28
-meetings 1711
+meetings 1712
 
 hands 5:10:25
-meetings 1661
+meetings 1662
 
 hands 8:12:20
 meetings 1128
 
 hands 8:8:24
-meetings 851
+meetings 868
 
 hands 6:5:29
 meetings 2526
@@ -80,7 +80,7 @@ hands 7:10:23
 meetings 1787
 
 hands 9:9:22
-meetings 851
+meetings 894
 
 hands 9:11:20
 meetings 1181
@@ -98,7 +98,7 @@ hands 9:11:20
 meetings 1270
 
 hands 4:7:29
-meetings 1835
+meetings 1836
 
 hands 4:13:23
 meetings 2255
@@ -107,10 +107,10 @@ hands 9:6:25
 meetings 903
 
 hands 6:5:29
-meetings 2081
+meetings 2082
 
 hands 7:7:26
-meetings 1587
+meetings 1588
 
 hands 5:11:24
 meetings 2165
@@ -137,7 +137,7 @@ hands 6:11:23
 meetings 1323
 
 hands 7:14:19
-meetings 535
+meetings 536
 
 hands 9:14:17
 meetings 1170
@@ -158,19 +158,19 @@ hands 7:14:19
 meetings 767
 
 hands 7:7:26
-meetings 1139
+meetings 1298
 
 hands 5:12:23
 meetings 1345
 
 hands 7:12:21
-meetings 1468
+meetings 1470
 
 hands 6:4:30
-meetings 1581
+meetings 1582
 
 hands 4:4:32
-meetings 1349
+meetings 4214
 
 hands 5:10:25
 meetings 1003
@@ -200,7 +200,7 @@ hands 9:10:21
 meetings 1328
 
 hands 8:12:20
-meetings 1106
+meetings 1107
 
 hands 4:9:27
 meetings 2154
@@ -209,7 +209,7 @@ hands 8:12:20
 meetings 1253
 
 hands 5:7:28
-meetings 1998
+meetings 1999
 
 hands 6:12:22
 meetings 1902
@@ -218,7 +218,7 @@ hands 7:7:26
 meetings 1776
 
 hands 7:7:26
-meetings 636
+meetings 752
 
 hands 6:13:21
 meetings 1188
@@ -230,7 +230,7 @@ hands 8:11:21
 meetings 1273
 
 hands 4:7:29
-meetings 2289
+meetings 2290
 
 hands 6:14:20
 meetings 1394
@@ -272,7 +272,7 @@ hands 6:6:6
 meetings 0
 
 hands 10:10:10
-meetings 0
+meetings 1
 
 hands 3:3:3
 meetings 2
@@ -281,7 +281,7 @@ hands 5:7:4
 meetings 3
 
 hands 6:8:12
-meetings 5
+meetings 7
 
 hands 6:8:12
 meetings 7
