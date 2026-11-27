@@ -2,6 +2,9 @@ from fractions import Fraction
 
 from days.base_part import BasePart
 
+def delta(a,b):
+  return ((a-b) % 1 + 1)
+
 class Part2(BasePart):
   def __init__(self):
     super().__init__(13,2,True)
@@ -22,6 +25,34 @@ class Part2(BasePart):
       self.pos = list(map(lambda x: int(x),self.input[clock_i+2][8:].split(":")))
       self.moves = list(map(lambda x: int(x),self.input[clock_i+3][5:].split(":")))
       max_moves = max(self.moves)
+
+      for a_i in range(0,2):
+        for b_i in range(a_i+1,3):
+          a_speed = Fraction(1,self.hands[a_i])
+          b_speed = Fraction(1,self.hands[b_i])
+          if self.clockwise[a_i] != self.clockwise[b_i]:
+            b_speed = -b_speed
+          rel_speed = abs(a_speed - b_speed)
+
+          # end early if they will never pass
+          if rel_speed == 0:
+            continue
+
+          if abs(a_speed) > abs(b_speed):
+            pd = delta(Fraction(self.pos[b_i],self.hands[b_i]),Fraction(self.pos[a_i],self.hands[a_i]))
+            t1 = pd/(a_speed-b_speed)
+          else:
+            pd = delta(Fraction(self.pos[a_i],self.hands[a_i]),Fraction(self.pos[b_i],self.hands[b_i]))
+            t1 = pd/(b_speed-a_speed)
+
+          td = 1/rel_speed
+
+          print(f"a_speed: {a_speed}, b_speed: {b_speed}, rel_speed: {rel_speed}, pd: {pd}, t1: {t1}, td: {td}")
+
+
+
+      return ""
+
       for t in range(0,max_moves):
 
         for a_i in range(0,len(self.hands)-1):
